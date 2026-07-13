@@ -473,7 +473,7 @@ def validation_laboratory_page() -> None:
     data = add_validation_metrics(validation[validation["year"] == year])
     metrics = validation_summary(data)
 
-   st.info(
+st.info(
     """
     Why compare these datasets?
 
@@ -494,7 +494,7 @@ def validation_laboratory_page() -> None:
     """
 )
 
-    m1, m2, m3, m4 = st.columns(4)
+m1, m2, m3, m4 = st.columns(4)
     m1.metric("Pearson r", f"{metrics['pearson']:.2f}")
     m2.metric("Spearman ρ", f"{metrics['spearman']:.2f}")
     m3.metric("Share RMSE", f"{metrics['share_rmse']:.2f} pp")
