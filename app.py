@@ -635,116 +635,103 @@ def temporal_analysis_page():
     province = st.selectbox("Province", provinces)
 
 
-# Use two axes only when both datasets are shown
-if dataset == "Compare both":
-    fig = make_subplots(specs=[[{"secondary_y": True}]])
-else:
-    fig = go.Figure()
-
-
-if dataset in ["Grid-derived estimates", "Compare both"]:
-
-    indicator = st.selectbox(
-        "Grid indicator",
-        ["GDP", "GDP_per_capita", "Population"],
-    )
-
-    g = (
-        grid[grid["province"] == province]
-        .sort_values("year")
-        .copy()
-    )
-
-    fig.add_trace(
-        go.Scatter(
-            x=g["year"],
-            y=g[indicator],
-            mode="lines+markers",
-            name=f"Grid {indicator}",
-        ),
-        secondary_y=(dataset == "Compare both"),
-    )
-
-
-if dataset in ["Official CBSL GDP", "Compare both"]:
-
-    official = load_official_gdp(str(OFFICIAL_GDP_PATH))
-
-    o = (
-        official[official["province"] == province]
-        .sort_values("year")
-        .copy()
-    )
-
+    # Use two axes only when comparing both datasets
     if dataset == "Compare both":
+        fig = make_subplots(specs=[[{"secondary_y": True}]])
+    else:
+        fig = go.Figure()
+
+    if dataset in ["Grid-derived estimates", "Compare both"]:
+
+        indicator = st.selectbox(
+            "Grid indicator",
+            ["GDP", "GDP_per_capita", "Population"],
+        )
+
+        g = (
+            grid[grid["province"] == province]
+            .sort_values("year")
+            .copy()
+        )
+
         fig.add_trace(
             go.Scatter(
-                x=o["year"],
-                y=o["official_gdp"],
+                x=g["year"],
+                y=g[indicator],
                 mode="lines+markers",
-                name="Official GDP (CBSL)",
+                name=f"Grid {indicator}",
             ),
+            secondary_y=(dataset == "Compare both"),
+        )
+
+    if dataset in ["Official CBSL GDP", "Compare both"]:
+
+        official = load_official_gdp(str(OFFICIAL_GDP_PATH))
+
+        o = (
+            official[official["province"] == province]
+            .sort_values("year")
+            .copy()
+        )
+
+        if dataset == "Compare both":
+            fig.add_trace(
+                go.Scatter(
+                    x=o["year"],
+                    y=o["official_gdp"],
+                    mode="lines+markers",
+                    name="Official GDP (CBSL)",
+                ),
+                secondary_y=True,
+            )
+        else:
+            fig.add_trace(
+                go.Scatter(
+                    x=o["year"],
+                    y=o["official_gdp"],
+                    mode="lines+markers",
+                    name="Official GDP (CBSL)",
+                )
+            )
+
+    fig.update_layout(
+        template="plotly_dark",
+        paper_bgcolor="#0B1220",
+        plot_bgcolor="#162032",
+        height=600,
+        hovermode="x unified",
+        legend=dict(
+            orientation="h",
+            y=1.05,
+            x=0,
+        ),
+    )
+
+    fig.update_xaxes(title_text="Year")
+
+    if dataset == "Compare both":
+        fig.update_yaxes(
+            title_text="Grid-derived estimates (Constant 2021 PPP)",
+            secondary_y=False,
+        )
+
+        fig.update_yaxes(
+            title_text="Official Provincial GDP (Current LKR)",
             secondary_y=True,
         )
     else:
-        fig.add_trace(
-            go.Scatter(
-                x=o["year"],
-                y=o["official_gdp"],
-                mode="lines+markers",
-                name="Official GDP (CBSL)",
-            )
+        fig.update_yaxes(title_text="GDP")
+
+    st.plotly_chart(fig, use_container_width=True)
+
+    if dataset == "Compare both":
+        st.info(
+            """
+            **Comparison note**
+
+            The grid-derived estimates and the official Provincial GDP statistics are reported using different measurement frameworks and units. The dual-axis chart is intended to compare changes through time rather than absolute GDP values.
+            """
         )
-
-
-fig.update_layout(
-    template="plotly_dark",
-    paper_bgcolor="#0B1220",
-    plot_bgcolor="#162032",
-    height=600,
-    hovermode="x unified",
-    legend=dict(
-        orientation="h",
-        y=1.05,
-        x=0,
-    ),
-)
-
-fig.update_xaxes(title_text="Year")
-
-if dataset == "Compare both":
-
-    fig.update_yaxes(
-        title_text="Grid-derived estimates (Constant 2021 PPP)",
-        secondary_y=False,
-    )
-
-    fig.update_yaxes(
-        title_text="Official Provincial GDP (Current LKR)",
-        secondary_y=True,
-    )
-
-else:
-
-    fig.update_yaxes(title_text="GDP")
-
-
-st.plotly_chart(fig, use_container_width=True)
-
-
-if dataset == "Compare both":
-
-    st.info(
-        """
-        **Comparison note**
-
-        The grid-derived estimates and the official Provincial GDP statistics
-        are reported using different measurement frameworks and units. The
-        dual-axis chart is intended to compare temporal trends rather than
-        absolute GDP values.
-        """
-    )
-
 def methodology_page() -> None:
     st.title("ℹ Methodology and Data Notes")
 
