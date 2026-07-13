@@ -5,4 +5,4 @@ geopandas>=1.0
 pyogrio>=0.10
 pydeck>=0.9
 plotly>=6.0
-
+scipy
