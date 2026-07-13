@@ -6,7 +6,9 @@ administrative boundary polygons when they are added later.
 """
 
 from __future__ import annotations
+from plotly.subplots import make_subplots
 
+import plotly.graph_objects as go
 import json
 import re
 from pathlib import Path
