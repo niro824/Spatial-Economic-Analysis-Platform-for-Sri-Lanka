@@ -715,7 +715,7 @@ def home_page() -> None:
             <h3>📊 Temporal Analysis</h3>
 
             Examine regional economic changes
-            between 2012 and 2024.
+            between 2012 and 2022.
             </div>
             """,
             unsafe_allow_html=True,
@@ -827,8 +827,7 @@ def main() -> None:
         validation_laboratory_page()
     elif page == "Temporal Analysis":
         temporal_analysis_page()
-    else:
-        methodology_page()
+
 
 
 if __name__ == "__main__":
