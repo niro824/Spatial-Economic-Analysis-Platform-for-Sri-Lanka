@@ -474,8 +474,20 @@ def validation_laboratory_page() -> None:
     metrics = validation_summary(data)
 
     st.info(
-        "The model field is labelled constant-2021 PPP, while the Central Bank series is current-price LKR. "
-        "The validation therefore compares provincial shares and ranks—not raw currency differences."
+        "Why compare these datasets?
+
+The grid-based estimates and official GDP statistics are produced using
+different approaches and units. Therefore, this comparison does not test
+whether the absolute GDP values are identical.
+
+Instead, it evaluates whether both datasets identify similar economic
+patterns across Sri Lankan provinces.
+
+The comparison focuses on:
+• Which provinces contribute the largest economic shares
+• Whether provincial rankings are similar
+• Whether spatial patterns agree"
+        
     )
 
     m1, m2, m3, m4 = st.columns(4)
