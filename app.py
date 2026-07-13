@@ -473,28 +473,31 @@ def validation_laboratory_page() -> None:
     data = add_validation_metrics(validation[validation["year"] == year])
     metrics = validation_summary(data)
 
-st.info(
-    """
-    Why compare these datasets?
+    st.info(
+        """
+        Why compare these datasets?
 
-    The grid-based estimates and official GDP statistics are produced using
-    different approaches and units. Therefore, this comparison does not test
-    whether the absolute GDP values are identical.
+        The grid-based estimates and official GDP statistics are produced using
+        different approaches and units. Therefore, this comparison does not test
+        whether the absolute GDP values are identical.
 
-    Instead, it evaluates whether both datasets identify similar economic
-    patterns across Sri Lankan provinces.
+        Instead, it evaluates whether both datasets identify similar economic
+        patterns across Sri Lankan provinces.
 
-    The comparison focuses on:
+        The comparison focuses on:
 
-    • Which provinces contribute the largest economic shares
+        • Which provinces contribute the largest economic shares
+        • Whether provincial rankings are similar
+        • Whether spatial patterns agree
+        """
+    )
 
-    • Whether provincial rankings are similar
+    m1, m2, m3, m4 = st.columns(4)
 
-    • Whether spatial patterns agree
-    """
-)
-
-m1, m2, m3, m4 = st.columns(4)
+    m1.metric("Pearson r", f"{metrics['pearson']:.2f}")
+    m2.metric("Spearman ρ", f"{metrics['spearman']:.2f}")
+    m3.metric("Share RMSE", f"{metrics['share_rmse']:.2f} pp")
+    m4.metric("Exact rank matches", f"{metrics['rank_match']:.0f}%")
     m1.metric("Pearson r", f"{metrics['pearson']:.2f}")
     m2.metric("Spearman ρ", f"{metrics['spearman']:.2f}")
     m3.metric("Share RMSE", f"{metrics['share_rmse']:.2f} pp")
