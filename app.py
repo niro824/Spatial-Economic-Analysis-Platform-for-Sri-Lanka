@@ -662,6 +662,7 @@ def home_page() -> None:
         This platform explores how economic activity is distributed across Sri Lanka.
         It combines spatial economic estimates derived from grid data with official
         provincial GDP statistics to examine regional patterns and disparities.
+        """
 
     )
 
