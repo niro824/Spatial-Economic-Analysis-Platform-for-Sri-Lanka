@@ -6,10 +6,10 @@ import plotly.express as px
 import pydeck as pdk
 
 ROOT = Path(__file__).resolve().parent
-DATA_DIR = ROOT / "data" / "processed"
-GPKG_PATH = DATA_DIR / "spatial_aggregates.gpkg"
-PROVINCE_CSV_PATH = DATA_DIR / "province_yearly.csv"
-DISTRICT_CSV_PATH = DATA_DIR / "district_yearly.csv"
+
+GPKG_PATH = ROOT / "spatial_aggregates.gpkg"
+PROVINCE_CSV_PATH = ROOT / "province_yearly.csv"
+DISTRICT_CSV_PATH = ROOT / "district_yearly.csv"
 
 
 @st.cache_data
