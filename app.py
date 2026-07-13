@@ -654,7 +654,7 @@ def temporal_analysis_page():
             .copy()
         )
 
-        fig.add_trace(
+    fig.add_trace(
             go.Scatter(
                 x=g["year"],
                 y=g[indicator],
