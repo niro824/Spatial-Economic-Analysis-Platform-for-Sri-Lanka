@@ -603,8 +603,10 @@ def validation_laboratory_page() -> None:
 
 def temporal_analysis_page():
 
-    st.title("📈 Temporal Analysis")
-    st.caption("Compare grid-derived estimates and official Provincial GDP statistics through time.")
+    st.title("📊 Temporal Analysis")
+    st.caption(
+        "Compare provincial trends from grid-derived estimates and official Provincial GDP statistics."
+    )
 
     if PROVINCE_CSV_PATH is None:
         st.error("province_yearly.csv is missing.")
@@ -631,22 +633,31 @@ def temporal_analysis_page():
         horizontal=True,
     )
 
-    provinces = sorted(grid["province"].unique())
-    province = st.selectbox("Province", provinces)
+    province = st.selectbox(
+        "Province",
+        sorted(grid["province"].unique()),
+    )
 
+    if dataset in ["Grid-derived estimates", "Compare both"]:
+        indicator = st.selectbox(
+            "Grid indicator",
+            ["GDP", "GDP_per_capita", "Population"],
+        )
 
-    # Use two axes only when comparing both datasets
+    # --------------------------------------------------------
+    # Create figure
+    # --------------------------------------------------------
+
     if dataset == "Compare both":
         fig = make_subplots(specs=[[{"secondary_y": True}]])
     else:
         fig = go.Figure()
 
-    if dataset in ["Grid-derived estimates", "Compare both"]:
+    # --------------------------------------------------------
+    # Grid data
+    # --------------------------------------------------------
 
-        indicator = st.selectbox(
-            "Grid indicator",
-            ["GDP", "GDP_per_capita", "Population"],
-        )
+    if dataset in ["Grid-derived estimates", "Compare both"]:
 
         g = (
             grid[grid["province"] == province]
@@ -654,15 +665,32 @@ def temporal_analysis_page():
             .copy()
         )
 
-    fig.add_trace(
-            go.Scatter(
-                x=g["year"],
-                y=g[indicator],
-                mode="lines+markers",
-                name=f"Grid {indicator}",
-            ),
-            secondary_y=(dataset == "Compare both"),
-        )
+        if dataset == "Compare both":
+
+            fig.add_trace(
+                go.Scatter(
+                    x=g["year"],
+                    y=g[indicator],
+                    mode="lines+markers",
+                    name=f"Grid {indicator}",
+                ),
+                secondary_y=False,
+            )
+
+        else:
+
+            fig.add_trace(
+                go.Scatter(
+                    x=g["year"],
+                    y=g[indicator],
+                    mode="lines+markers",
+                    name=f"Grid {indicator}",
+                )
+            )
+
+    # --------------------------------------------------------
+    # Official GDP
+    # --------------------------------------------------------
 
     if dataset in ["Official CBSL GDP", "Compare both"]:
 
@@ -674,25 +702,33 @@ def temporal_analysis_page():
             .copy()
         )
 
-    if dataset == "Compare both":
-    fig.add_trace(
-        go.Scatter(
-            x=o["year"],
-            y=o["official_gdp"],
-            mode="lines+markers",
-            name="Official GDP (CBSL)",
-        ),
-        secondary_y=True,
-    )
-else:
-    fig.add_trace(
-        go.Scatter(
-            x=o["year"],
-            y=o["official_gdp"],
-            mode="lines+markers",
-            name="Official GDP (CBSL)",
-        )
-    )
+        if dataset == "Compare both":
+
+            fig.add_trace(
+                go.Scatter(
+                    x=o["year"],
+                    y=o["official_gdp"],
+                    mode="lines+markers",
+                    name="Official GDP (CBSL)",
+                ),
+                secondary_y=True,
+            )
+
+        else:
+
+            fig.add_trace(
+                go.Scatter(
+                    x=o["year"],
+                    y=o["official_gdp"],
+                    mode="lines+markers",
+                    name="Official GDP (CBSL)",
+                )
+            )
+
+    # --------------------------------------------------------
+    # Layout
+    # --------------------------------------------------------
+
     fig.update_layout(
         template="plotly_dark",
         paper_bgcolor="#0B1220",
@@ -709,6 +745,7 @@ else:
     fig.update_xaxes(title_text="Year")
 
     if dataset == "Compare both":
+
         fig.update_yaxes(
             title_text="Grid-derived estimates (Constant 2021 PPP)",
             secondary_y=False,
@@ -718,18 +755,29 @@ else:
             title_text="Official Provincial GDP (Current LKR)",
             secondary_y=True,
         )
+
+    elif dataset == "Official CBSL GDP":
+
+        fig.update_yaxes(
+            title_text="Official Provincial GDP (Current LKR)"
+        )
+
     else:
-        fig.update_yaxes(title_text="GDP")
+
+        fig.update_yaxes(
+            title_text=indicator.replace("_", " ")
+        )
 
     st.plotly_chart(fig, use_container_width=True)
 
     if dataset == "Compare both":
+
         st.info(
             """
-            **Comparison note**
+**Comparison note**
 
-            The grid-derived estimates and the official Provincial GDP statistics are reported using different measurement frameworks and units. The dual-axis chart is intended to compare changes through time rather than absolute GDP values.
-            """
+The grid-derived estimates and the official Provincial GDP statistics are expressed in different units and are produced using different methodologies. The dual-axis chart is intended to compare temporal trends and turning points rather than absolute GDP values.
+"""
         )
 def methodology_page() -> None:
     st.title("ℹ Methodology and Data Notes")
