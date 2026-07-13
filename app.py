@@ -654,20 +654,38 @@ def render_theme() -> None:
     )
 def home_page() -> None:
 
-    st.title("🌏 Sri Lanka Spatial Economic Analysis Platform")
+    st.title("Sri Lanka Spatial Economic Analysis Platform")
 
     st.markdown(
         """
-        ## Mapping regional economic inequality through spatial data
+        ## Understanding Sri Lanka's Economic Geography Through Spatial Data
+        This platform explores how economic activity is distributed across Sri Lanka.
+        It combines spatial economic estimates derived from grid data with official
+        provincial GDP statistics to examine regional patterns and disparities.
 
-        This platform provides an interactive environment for exploring
-        spatial economic patterns in Sri Lanka using grid-based economic
-        estimates and official regional statistics.
+        How does the analysis work?
 
-        The application aggregates model-derived economic information from
-        spatial grids into administrative regions and evaluates whether
-        these patterns reproduce known regional economic structures.
-        """
+        Economic activity is not evenly distributed across space. Traditional
+        statistics describe regions such as provinces, but spatial datasets allow
+        economic patterns to be examined in more detail.
+
+        This platform follows three steps:
+
+        1. Estimate
+           Grid-based economic data are aggregated into Sri Lankan provinces and districts.
+
+        ↓
+
+        2. Compare
+           The estimated economic distribution is compared with official Provincial GDP
+            statistics published by the Central Bank of Sri Lanka.
+
+        ↓
+
+        3. Explore
+           Users can examine regional differences, economic concentration, and changes
+           over time.
+           """
     )
 
     st.divider()
