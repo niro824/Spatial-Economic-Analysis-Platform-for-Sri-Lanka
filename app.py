@@ -652,7 +652,151 @@ def render_theme() -> None:
         """,
         unsafe_allow_html=True,
     )
+def home_page() -> None:
 
+    st.title("🌏 Sri Lanka Spatial Economic Analysis Platform")
+
+    st.markdown(
+        """
+        ## Mapping regional economic inequality through spatial data
+
+        This platform provides an interactive environment for exploring
+        spatial economic patterns in Sri Lanka using grid-based economic
+        estimates and official regional statistics.
+
+        The application aggregates model-derived economic information from
+        spatial grids into administrative regions and evaluates whether
+        these patterns reproduce known regional economic structures.
+        """
+    )
+
+    st.divider()
+
+    c1, c2, c3 = st.columns(3)
+
+    with c1:
+        st.markdown(
+            """
+            <div class="metric-card">
+            <h3>🗺 Spatial Explorer</h3>
+
+            Explore spatial patterns of:
+            <br>
+            • GDP
+            <br>
+            • GDP per capita
+            <br>
+            • Population
+
+            across provinces and districts.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    with c2:
+        st.markdown(
+            """
+            <div class="metric-card">
+            <h3>📈 Validation Laboratory</h3>
+
+            Compare grid-derived economic estimates
+            with official Provincial GDP statistics
+            from the Central Bank of Sri Lanka.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    with c3:
+        st.markdown(
+            """
+            <div class="metric-card">
+            <h3>📊 Temporal Analysis</h3>
+
+            Examine regional economic changes
+            between 2012 and 2024.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+
+    st.divider()
+
+    st.subheader("Research Framework")
+
+    st.write(
+        """
+        The analytical framework follows four stages:
+
+        **1. Spatial economic estimation**
+
+        Grid-based economic estimates are processed at fine spatial
+        resolution.
+
+        **2. Regional aggregation**
+
+        Grid cells are aggregated into Sri Lankan provinces and districts.
+
+        **3. Validation**
+
+        Estimated regional economic patterns are compared with official
+        Provincial GDP statistics published by the Central Bank of Sri Lanka.
+
+        **4. Spatial inequality analysis**
+
+        The validated dataset supports analysis of regional economic
+        disparities.
+        """
+    )
+
+
+    st.divider()
+
+    st.subheader("Validation Approach")
+
+    st.info(
+        """
+        The validation compares spatial distribution rather than absolute
+        monetary values.
+
+        The analysis evaluates:
+
+        • Provincial GDP shares
+
+        • Regional ranking consistency
+
+        • Pearson correlation
+
+        • Spearman rank correlation
+
+        • Spatial agreement between datasets
+
+        This approach avoids direct comparison between different GDP
+        measurement frameworks.
+        """
+    )
+
+
+    st.divider()
+
+    st.subheader("Acknowledgement")
+
+    st.markdown(
+        """
+        This research platform was developed at the Graduate School of
+        International Development (GSID), Nagoya University.
+
+        **Academic guidance**
+
+        Professor Carlos Mendez
+
+        **Official economic statistics**
+
+        Central Bank of Sri Lanka Provincial GDP statistics
+        """
+    )
 
 def main() -> None:
     render_theme()
