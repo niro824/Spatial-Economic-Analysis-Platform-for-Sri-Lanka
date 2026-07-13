@@ -283,8 +283,6 @@ def main() -> None:
         key="page",
     )
 
-    st.session_state.page = page
-
     if page == "Home":
         home_page()
     elif page == "Spatial Explorer":
