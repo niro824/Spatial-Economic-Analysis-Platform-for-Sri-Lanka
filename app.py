@@ -777,8 +777,6 @@ def home_page() -> None:
 
     st.divider()
 
-    st.subheader("Acknowledgement")
-
     st.markdown(
         """
         Developed by **Niromi Rajapaksha** at the Graduate School of International
