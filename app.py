@@ -816,7 +816,6 @@ def main() -> None:
         "Spatial Explorer",
         "Validation Laboratory",
         "Temporal Analysis",
-        "Methodology",
     ]
     if "page" not in st.session_state:
         st.session_state["page"] = "Home"
