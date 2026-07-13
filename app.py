@@ -634,7 +634,6 @@ def temporal_analysis_page():
     provinces = sorted(grid["province"].unique())
     province = st.selectbox("Province", provinces)
 
-   from plotly.subplots import make_subplots
 
 # Use two axes only when both datasets are shown
 if dataset == "Compare both":
