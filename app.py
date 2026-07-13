@@ -663,29 +663,6 @@ def home_page() -> None:
         It combines spatial economic estimates derived from grid data with official
         provincial GDP statistics to examine regional patterns and disparities.
 
-        How does the analysis work?
-
-        Economic activity is not evenly distributed across space. Traditional
-        statistics describe regions such as provinces, but spatial datasets allow
-        economic patterns to be examined in more detail.
-
-        This platform follows three steps:
-
-        1. Estimate
-           Grid-based economic data are aggregated into Sri Lankan provinces and districts.
-
-        ↓
-
-        2. Compare
-           The estimated economic distribution is compared with official Provincial GDP
-            statistics published by the Central Bank of Sri Lanka.
-
-        ↓
-
-        3. Explore
-           Users can examine regional differences, economic concentration, and changes
-           over time.
-           """
     )
 
     st.divider()
