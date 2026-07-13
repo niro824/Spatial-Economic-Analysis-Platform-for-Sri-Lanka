@@ -599,50 +599,101 @@ def validation_laboratory_page() -> None:
     st.dataframe(ranking, hide_index=True, use_container_width=True)
 
 
-def temporal_analysis_page() -> None:
-    st.title("📊 Temporal Analysis")
-    st.caption("Track economic change through time and compare provinces.")
+def temporal_analysis_page():
+
+    st.title("📊 Regional Trends")
+    st.caption("Compare regional economic trends from grid-derived estimates and official Provincial GDP statistics.")
 
     if PROVINCE_CSV_PATH is None:
         st.error("province_yearly.csv is missing.")
         return
 
-    province_data = load_table(str(PROVINCE_CSV_PATH)).copy()
-    province_column = find_column(province_data, ["province"])
-    year_column = find_column(province_data, ["year"])
-    if province_column is None or year_column is None:
-        st.error("province_yearly.csv needs province and year columns.")
-        return
+    grid = load_table(str(PROVINCE_CSV_PATH)).copy()
 
-    province_data = province_data.rename(columns={province_column: "province", year_column: "year"})
-    indicators = [column for column in ["GDP", "GDP_per_capita", "Population"] if column in province_data.columns]
-    indicator = st.selectbox("Indicator", indicators)
-    options = sorted(province_data["province"].dropna().unique().tolist())
-    selected = st.multiselect("Provinces", options, default=options[:3])
+    grid = grid.rename(
+        columns={
+            find_column(grid, ["province"]): "province",
+            find_column(grid, ["year"]): "year",
+        }
+    )
 
-    data = province_data[province_data["province"].isin(selected)].copy()
-    data[indicator] = pd.to_numeric(data[indicator], errors="coerce")
+    grid["year"] = pd.to_numeric(grid["year"])
 
-    figure = go.Figure()
-    for province in selected:
-        subset = data[data["province"] == province].sort_values("year")
-        figure.add_trace(
+    dataset = st.radio(
+        "Dataset",
+        [
+            "Grid-derived estimates",
+            "Official CBSL GDP",
+            "Compare both",
+        ],
+        horizontal=True,
+    )
+
+    provinces = sorted(grid["province"].unique())
+    province = st.selectbox("Province", provinces)
+
+    fig = go.Figure()
+
+    if dataset in ["Grid-derived estimates", "Compare both"]:
+
+        indicator = st.selectbox(
+            "Grid indicator",
+            ["GDP", "GDP_per_capita", "Population"],
+        )
+
+        g = (
+            grid[grid["province"] == province]
+            .sort_values("year")
+            .copy()
+        )
+
+        fig.add_trace(
             go.Scatter(
-                x=subset["year"],
-                y=subset[indicator],
+                x=g["year"],
+                y=g[indicator],
                 mode="lines+markers",
-                name=province,
+                name=f"Grid {indicator}",
             )
         )
-    figure.update_layout(
+
+    if dataset in ["Official CBSL GDP", "Compare both"]:
+
+        official = load_official_gdp(str(OFFICIAL_GDP_PATH))
+
+        o = (
+            official[official["province"] == province]
+            .sort_values("year")
+            .copy()
+        )
+
+        fig.add_trace(
+            go.Scatter(
+                x=o["year"],
+                y=o["official_gdp"],
+                mode="lines+markers",
+                name="Official GDP",
+            )
+        )
+
+    fig.update_layout(
         template="plotly_dark",
         paper_bgcolor="#0B1220",
         plot_bgcolor="#162032",
+        height=600,
         xaxis_title="Year",
-        yaxis_title=indicator.replace("_", " "),
-        height=560,
+        yaxis_title="GDP",
     )
-    st.plotly_chart(figure, use_container_width=True)
+
+    st.plotly_chart(fig, use_container_width=True)
+
+    st.info(
+        """
+        The grid-derived GDP estimates and official Provincial GDP statistics
+        are reported in different units. When both datasets are displayed
+        together, the comparison should focus on changes in temporal patterns
+        rather than absolute GDP values.
+        """
+    )
 
 
 def methodology_page() -> None:
