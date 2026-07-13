@@ -603,8 +603,8 @@ def validation_laboratory_page() -> None:
 
 def temporal_analysis_page():
 
-st.title("📈 Temporal Analysis")
-st.caption("Compare grid-derived estimates and official Provincial GDP statistics through time.")
+    st.title("📈 Temporal Analysis")
+    st.caption("Compare grid-derived estimates and official Provincial GDP statistics through time.")
 
     if PROVINCE_CSV_PATH is None:
         st.error("province_yearly.csv is missing.")
