@@ -502,7 +502,41 @@ def validation_laboratory_page() -> None:
     m2.metric("Spearman ρ", f"{metrics['spearman']:.2f}")
     m3.metric("Share RMSE", f"{metrics['share_rmse']:.2f} pp")
     m4.metric("Exact rank matches", f"{metrics['rank_match']:.0f}%")
+    
+    st.subheader("Understanding the Results")
 
+    r = metrics["pearson"]
+
+    if r >= 0.80:
+        interpretation = "The grid-based estimates show a strong agreement with official GDP patterns across provinces."
+    elif r >= 0.50:
+        interpretation = "The grid-based estimates capture a moderate similarity with official GDP patterns, although some provincial differences remain."
+    else:
+        interpretation = "The relationship between the two datasets is weak, suggesting substantial differences in provincial patterns."
+
+    st.info(
+        f"""
+        **Spatial agreement**
+
+        {interpretation}
+
+        A Pearson correlation of **{metrics['pearson']:.2f}** indicates how closely
+        the two datasets identify high and low economic activity regions.
+
+        **Ranking consistency**
+
+        The comparison also evaluates whether provinces appear in similar positions
+        in both datasets. The current year shows **{metrics['rank_match']:.0f}%**
+        exact agreement in provincial ranking.
+
+        **How to interpret differences**
+
+        Differences do not necessarily indicate that one dataset is incorrect.
+        The grid estimates and official GDP statistics are produced using different
+        methods. The comparison examines whether they reveal similar spatial
+        economic structures rather than identical GDP values.
+        """
+    )
     st.markdown(validation_explainer(data, metrics, year))
     st.divider()
 
