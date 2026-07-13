@@ -11,7 +11,9 @@ GPKG_PATH = ROOT / "spatial_aggregates.gpkg"
 PROVINCE_CSV_PATH = ROOT / "province_yearly.csv"
 DISTRICT_CSV_PATH = ROOT / "district_yearly.csv"
 
-
+def go_to(page_name: str) -> None:
+    st.session_state["page"] = page_name
+    
 @st.cache_data
 def load_geo_layer(layer_name: str) -> gpd.GeoDataFrame:
     return gpd.read_file(GPKG_PATH, layer=layer_name)
@@ -193,9 +195,12 @@ def home_page() -> None:
             """,
             unsafe_allow_html=True,
         )
-        if st.button("Open Spatial Explorer", key="home_explorer"):
-            st.session_state.page = "Spatial Explorer"
-            st.experimental_rerun()
+        if st.button(
+    "Open Spatial Explorer",
+    key="home_explorer",
+    on_click=go_to,
+    args=("Spatial Explorer",),
+)
 
     with c2:
         st.markdown(
@@ -208,8 +213,7 @@ def home_page() -> None:
             unsafe_allow_html=True,
         )
         if st.button("Open Validation Laboratory", key="home_validation"):
-            st.session_state.page = "Validation Laboratory"
-            st.experimental_rerun()
+  
 
     with c3:
         st.markdown(
@@ -220,10 +224,7 @@ def home_page() -> None:
             </div>
             """,
             unsafe_allow_html=True,
-        )
-        if st.button("Open Temporal Analysis", key="home_temporal"):
-            st.session_state.page = "Temporal Analysis"
-            st.experimental_rerun()
+       
 
     st.divider()
     st.subheader("Project Overview")
@@ -264,18 +265,13 @@ def main() -> None:
     )
     render_dark_theme()
 
-    if "page" not in st.session_state:
-        st.session_state.page = "Home"
 
     st.sidebar.title("Navigation")
     page = st.sidebar.radio(
-        "",
-        [
-            "Home",
-            "Spatial Explorer",
-            "Validation Laboratory",
-            "Temporal Analysis",
-            "Methodology",
+    "Navigate",
+    ["Home", "Spatial Explorer", "Validation Laboratory", "Temporal Analysis"],
+    key="page",
+)
         ],
         index=["Home", "Spatial Explorer", "Validation Laboratory", "Temporal Analysis", "Methodology"].index(
             st.session_state.page
