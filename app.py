@@ -272,7 +272,7 @@ def main() -> None:
     ["Home", "Spatial Explorer", "Validation Laboratory", "Temporal Analysis"],
     key="page",
 )
-        ],
+        ),
         index=["Home", "Spatial Explorer", "Validation Laboratory", "Temporal Analysis", "Methodology"].index(
             st.session_state.page
         ),
