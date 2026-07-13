@@ -675,25 +675,27 @@ def temporal_analysis_page():
         )
 
         if dataset == "Compare both":
-            fig.add_trace(
-                go.Scatter(
-                    x=o["year"],
-                    y=o["official_gdp"],
-                    mode="lines+markers",
-                    name="Official GDP (CBSL)",
-                ),
-                secondary_y=True,
-            )
-        else:
-            fig.add_trace(
-                go.Scatter(
-                    x=o["year"],
-                    y=o["official_gdp"],
-                    mode="lines+markers",
-                    name="Official GDP (CBSL)",
-                )
-            )
 
+    fig.add_trace(
+        go.Scatter(
+            x=g["year"],
+            y=g[indicator],
+            mode="lines+markers",
+            name=f"Grid {indicator}",
+        ),
+        secondary_y=False,
+    )
+
+else:
+
+    fig.add_trace(
+        go.Scatter(
+            x=g["year"],
+            y=g[indicator],
+            mode="lines+markers",
+            name=f"Grid {indicator}",
+        )
+    )
     fig.update_layout(
         template="plotly_dark",
         paper_bgcolor="#0B1220",
