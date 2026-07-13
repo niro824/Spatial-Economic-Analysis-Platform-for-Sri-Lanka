@@ -781,19 +781,16 @@ def home_page() -> None:
 
     st.markdown(
         """
-        This research platform was developed at the Graduate School of
-        International Development (GSID), Nagoya University.
+        Developed by **Niromi Rajapaksha** at the Graduate School of International
+        Development, Nagoya University.
 
-        **Academic guidance**
+        This platform uses gridded GDP estimates from the University of Chicago's
+        Local GDP Estimates project and official Provincial GDP statistics from the
+        Central Bank of Sri Lanka to explore regional economic patterns.
 
-        Professor Carlos Mendez
-
-        **Official economic statistics**
-
-        Central Bank of Sri Lanka Provincial GDP statistics
+        Research guidance and academic support from **Professor Carlos Mendez**.
         """
     )
-
 def main() -> None:
     render_theme()
 
